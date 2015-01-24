@@ -3,4 +3,5 @@ This webapp shows upcoming sport games, in a simple yet complete way.
 
 Team members: 
 
-[https://github.com/OscarRyz](@OscarRyz) [https://github.com/worg](@Worg) 
+[@Worg](https://github.com/worg)
+[@OscarRyz](https://github.com/OscarRyz)  
