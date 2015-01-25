@@ -22,6 +22,7 @@
     <h2>{{.title}} {{if .Tomorrow}}{{.Tomorrow}}{{end}}</h2>
   </div>
 </div>
+{{if .images.Data}}
 <div class="container">  
   <h2>Reactions:</h2>
   <div class="reactions text-center">
@@ -30,3 +31,4 @@
   {{end}}
   </div>
 </div>{{template "footer"}}{{end}}
+{{end}}

@@ -1,5 +1,14 @@
 $(document).ready(function() {
     'use strict';
+    var setsport = function(sport){
+        d = new Date();
+        $.get('/sport/'+sport, function(data) {
+            $('.teams').attr('data-sport', sport);
+            $('.teams').attr('data-date', d);
+            $('.teams').html(data);
+        });
+    }
+
     $('#load-more').click(function(e){
         e.preventDefault();
         var lastd = new Date($('.teams').attr('data-date'));
@@ -13,7 +22,17 @@ $(document).ready(function() {
         var uri = '/sport/'+sport.toLowerCase()+'/'+datef;
         $('.teams').attr('data-date', lastd.toString());
         $.get(uri, function(data) {
-            $('.teams').append(data)
+            $('.teams').append(data);
         });
     });
+
+    $('#sport-nba').click(function(e){
+        e.preventDefault();
+        setsport('nba');
+    })
+
+    $('#sport-nfl').click(function(e){
+        e.preventDefault();
+        setsport('nfl');
+    })
 });
