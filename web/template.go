@@ -14,7 +14,7 @@ type args map[string]interface{}
 
 func loadTmpl() {
 	// cache template parsing
-	tLoader = template.Must(template.New(``).Funcs(funcMap).ParseGlob(`web/resources/templates/*`))
+	tLoader = template.Must(template.New(``).Funcs(funcMap).ParseGlob(`resources/templates/*`))
 }
 
 func execT(w http.ResponseWriter, name string, data interface{}) {
@@ -45,14 +45,6 @@ func customT(w http.ResponseWriter, name string, data interface{}) {
 	head(w, data)
 	execT(w, name, data)
 	footer(w, data)
-}
-
-func tmplPath(n ...string) []string {
-	for i, v := range n {
-		n[i] = tp + v
-	}
-
-	return n
 }
 
 func addTfunc(name string, fn interface{}) {

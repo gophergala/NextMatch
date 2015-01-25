@@ -1,8 +1,9 @@
-package updater
+package xmlstats
 
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"time"
 )
@@ -53,6 +54,7 @@ type (
 		SiteName     string `json:"site_name"`
 		State        string `json:"state"`
 		TeamID       string `json:"team_id"`
+		Logo        string
 	}
 
 	Site struct {
@@ -65,70 +67,69 @@ type (
 )
 
 const (
-	shortf  = `20060102`
-	evtURI  = `https://erikberg.com/events.json?sport=%s&date=%s` // league[nba,nfl] date
-	rsltURI = `https://erikberg.com//sport/results/%s.json`       // team_id
-	token   = `0c301171-c857-4d46-b73f-d8f46602cae9`
+	shortf    = "20060102"
+	eventURI  = "https://erikberg.com/events.json?sport=%s&date=%s" // league[nba,nfl] date
+	resultURI = "https://erikberg.com/sport/results/%s.json"        // team_id
+	userAgent = "nextmatch/0.1 (https://twitter.com/oscarryz)"
+	auth      = "Bearer %s"
 )
 
 var (
-	decoder *json.Decoder
+	Token string
 )
+
+var cache = make(map[string]interface{})
+
+func doRequest(uri string, result interface{}) error {
+
+	req, err := http.NewRequest("GET", uri, nil)
+	if err != nil {
+		return err
+	}
+
+	req.Header.Add("Authorization", fmt.Sprintf(auth, Token))
+	req.Header.Add("User-agent", userAgent)
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return err
+	}
+	log.Printf("%s for URI %s", resp.Status, uri)
+
+	err = decode(resp, result)
+	return err
+}
 
 // BySport returns events in certain sport [with an optional date]
 func BySport(sport string, date ...string) (ev Events, err error) {
-	var (
-		resp *http.Response
-		req  *http.Request
-	)
 
 	if len(date) < 1 {
 		date = append(date, time.Now().Format(shortf))
 	}
+	uri := fmt.Sprintf(eventURI, sport, date[0])
+	if cache[uri] != nil {
+		log.Printf("cache  for URI %s", uri)
 
-	uri := fmt.Sprintf(evtURI, sport, date[0])
-	if req, err = http.NewRequest(`GET`, uri, nil); err != nil {
-		return
+		return cache[uri].(Events), nil
 	}
-
-	req.Header.Add("Authorization", "Bearer "+token)
-
-	if resp, err = http.DefaultClient.Do(req); err != nil {
-		return
-	}
-
-	if err = decode(resp, &ev); err != nil {
-		return
-	}
-
-	return
+	err = doRequest(uri, &ev)
+	cache[uri] = ev
+	return ev, err
 }
 
 // Result
-func Result(team_id int) (rslt Results, err error) {
-	var (
-		req  *http.Request
-		resp *http.Response
-	)
-
-	if req, err = http.NewRequest(`GET`, fmt.Sprintf(rsltURI, team_id), nil); err != nil {
-		return
+func Result(teamId int) (results Results, err error) {
+	uri := fmt.Sprintf(resultURI, teamId)
+	if cache[uri] != nil {
+		return cache[uri].(Results), nil
 	}
-
-	if resp, err = http.DefaultClient.Do(req); err != nil {
-		return
-	}
-
-	if err = decode(resp, rslt); err != nil {
-		return
-	}
-
-	return
+	err = doRequest(uri, &results)
+	cache[uri] = results
+	return results, err
 }
 
 func decode(resp *http.Response, d interface{}) error {
-	decoder = json.NewDecoder(resp.Body)
-
+	decoder := json.NewDecoder(resp.Body)
 	return decoder.Decode(d)
 }
 
