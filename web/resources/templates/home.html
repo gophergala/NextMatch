@@ -1,4 +1,4 @@
-{{define "home"}}
+{{define "home"}}{{template "header"}}
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
     <a class="navbar-brand" href="/">NextMatch</a>
      <ul class="nav navbar-nav">
@@ -35,7 +35,5 @@
             {{$date := parse `2006-01-2T15:04:05-07:00` $e.StartDateTime}}
             {{$date.Format `15:04`}} - {{$e.Site.Name}} - {{$e.EventStatus}}
         </div>
-    </div>
-    {{end}}
-</div>
-{{end}}
+    </div>{{end}}
+</div>{{template "footer"}}{{end}}
