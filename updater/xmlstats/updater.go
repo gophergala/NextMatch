@@ -3,9 +3,9 @@ package xmlstats
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"time"
-	"log"
 )
 
 type (
@@ -78,16 +78,10 @@ var (
 )
 
 var cache = make(map[string]interface{})
-func doRequest(uri string, result interface{})  error {
-    log.Printf("URI: %s", uri)
-    r := cache[uri]
-    if r != nil {
-        result = r
-        log.Printf("Cache hit! %s\n", uri)
-        return nil // no error
-    }
 
-	req, err := http.NewRequest("GET", uri, nil )
+func doRequest(uri string, result interface{}) error {
+
+	req, err := http.NewRequest("GET", uri, nil)
 	if err != nil {
 		return err
 	}
@@ -99,11 +93,9 @@ func doRequest(uri string, result interface{})  error {
 	if err != nil {
 		return err
 	}
-	log.Printf("response status %s", resp.Status)
+	log.Printf("%s for URI %s", resp.Status, uri)
 
 	err = decode(resp, result)
-	cache[uri] = result
-	log.Printf("Added to cache %#v", cache[uri])
 	return err
 }
 
@@ -113,14 +105,25 @@ func BySport(sport string, date ...string) (ev Events, err error) {
 	if len(date) < 1 {
 		date = append(date, time.Now().Format(shortf))
 	}
+	uri := fmt.Sprintf(eventURI, sport, date[0])
+	if cache[uri] != nil {
+		log.Printf("cache  for URI %s", uri)
 
-    err = doRequest(fmt.Sprintf(eventURI, sport, date[0]), &ev)
-    return ev, err
+		return cache[uri].(Events), nil
+	}
+	err = doRequest(uri, &ev)
+	cache[uri] = ev
+	return ev, err
 }
 
 // Result
 func Result(teamId int) (results Results, err error) {
-	err = doRequest(fmt.Sprintf(resultURI, teamId), &results)
+	uri := fmt.Sprintf(resultURI, teamId)
+	if cache[uri] != nil {
+		return cache[uri].(Results), nil
+	}
+	err = doRequest(uri, &results)
+	cache[uri] = results
 	return results, err
 }
 
