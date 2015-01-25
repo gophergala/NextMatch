@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"time"
+	"log"
 )
 
 type (
@@ -76,7 +77,15 @@ var (
 	Token string
 )
 
+var cache = make(map[string]interface{})
 func doRequest(uri string, result interface{})  error {
+    log.Printf("URI: %s", uri)
+    r := cache[uri]
+    if r != nil {
+        result = r
+        log.Printf("Cache hit! %s\n", uri)
+        return nil // no error
+    }
 
 	req, err := http.NewRequest("GET", uri, nil )
 	if err != nil {
@@ -90,8 +99,12 @@ func doRequest(uri string, result interface{})  error {
 	if err != nil {
 		return err
 	}
+	log.Printf("response status %s", resp.Status)
 
-	return decode(resp, result)
+	err = decode(resp, result)
+	cache[uri] = result
+	log.Printf("Added to cache %#v", cache[uri])
+	return err
 }
 
 // BySport returns events in certain sport [with an optional date]

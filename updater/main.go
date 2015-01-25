@@ -3,7 +3,7 @@ package main
 
 import (
 	"fmt"
-	xmlstats "github.com/gophergala/NextMatch/updater/xmlstats"
+    "github.com/gophergala/NextMatch/updater/xmlstats"
 	"log"
 	"os"
 )
