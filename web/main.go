@@ -65,6 +65,7 @@ func main() {
 	http.Handle("/static/", static(http.FileServer(http.Dir("."))))
 	http.Handle(`/`, r)
 	r.NotFoundHandler = new(fof)
+	log.Println("Yes M'Lord. I'm ready.")
 
 	log.Fatal(http.ListenAndServe(":"+*port, nil))
 }

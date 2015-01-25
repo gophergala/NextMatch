@@ -9,6 +9,7 @@
     {{$ed}}
 </h2>
 {{range $e := .events.Event}}
+    <a href="/nba/{{$e.AwayTeam.Abbreviation}}-vs-{{$e.HomeTeam.Abbreviation}}" class="details">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 card">
         <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 away" data-id="{{$e.AwayTeam.TeamID}}">
             <span class="team-img"><img src="{{$e.AwayTeam.Logo}}"></span>
@@ -21,6 +22,7 @@
         {{$date := parse $longf $e.StartDateTime}}
         <div class="info text-center">{{$date.Format `15:04`}} - {{$e.Site.Name}} - {{$e.EventStatus}}</div>
     </div>
+    </a>
 {{end}}
 {{if not .events.Event}}
     <h3>No results… try hitting the load more button</h3>
