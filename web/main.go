@@ -23,6 +23,7 @@ var port = flag.String("p", "80", "the port on wich we're serving")
 func init() {
 	addTfunc("parse", time.Parse)
 	addTfunc("now", time.Now)
+	addTfunc("lower", strings.ToLower)
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {

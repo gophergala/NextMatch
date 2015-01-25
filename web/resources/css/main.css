@@ -7,11 +7,8 @@
     position: relative;
 }
 
-.teams .home,
-.teams .away{cursor: pointer;}
-
-.teams .home:hover,
-.teams .away:hover{background: #FCFCFC;}
+.teams .card{cursor: pointer;}
+.teams .card:hover{background: #FCFCFC;}
 
 .teams .home{text-align: right;}
 .teams .team-img{
@@ -36,4 +33,10 @@
     display: inline-block;
 }
 
-.details { text-decoration: none; }
+.details { text-decoration: none; }}
+
+.reactions img{
+    max-width: 30%;
+    padding: 1%;
+    display: inline-block;
+}

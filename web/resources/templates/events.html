@@ -5,7 +5,7 @@
 {{$today := now.Format $dayf}}
 {{$ed := $eventsDate.Format $dayf}}
 {{$sp := ``}}
-<h2>{{if eq $ed $today}}Today -{{end}}
+<h2 class="range">{{if eq $ed $today}}Today -{{end}}
     {{$ed}}
 </h2>
 {{range $e := .events.Event}}
@@ -13,15 +13,14 @@
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 card">
         <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 away" data-id="{{$e.AwayTeam.TeamID}}">
             <span class="team-img"><img src="{{$e.AwayTeam.Logo}}"></span>
-            <h3>{{$e.AwayTeam.FirstName}}</h3>
+            <h3>{{$e.AwayTeam.FirstName}} {{$e.AwayTeam.LastName}}</h3>
         </div>
         <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 home" data-id="{{$e.HomeTeam.TeamID}}">
             <span class="team-img"><img src="{{$e.HomeTeam.Logo}}"></span>
-            <h3>{{$e.HomeTeam.FirstName}}</h3>
+            <h3>{{$e.HomeTeam.FirstName}} {{$e.HomeTeam.LastName}}</h3>
         </div>
         {{$date := parse $longf $e.StartDateTime}}
         <div class="info text-center">{{$date.Format `15:04`}} - {{$e.Site.Name}} - {{$e.EventStatus}}</div>
-    </div>
     </a>
 {{end}}
 {{if not .events.Event}}
