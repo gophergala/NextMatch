@@ -57,8 +57,11 @@ func main() {
 	r.HandleFunc("/refresh", reload)
 	r.HandleFunc("/", handler)
 	r.HandleFunc("/favicon.ico", func(w http.ResponseWriter, r *http.Request) {})
+	r.HandleFunc("/404", thatsA404)
 	http.Handle("/static/", static(http.FileServer(http.Dir("."))))
 	http.Handle(`/`, r)
+	r.NotFoundHandler = new(fof)
+
 	log.Fatal(http.ListenAndServe(":"+*port, nil))
 }
 
@@ -91,4 +94,16 @@ func getSport(req *http.Request) (xmlstats.Events, error) {
 	}
 
 	return xmlstats.BySport(name, date)
+}
+
+// 404 shenanigans
+func thatsA404(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(404)
+	execT(w, "404", nil)
+}
+
+type fof int
+
+func (f *fof) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	thatsA404(w, r)
 }
