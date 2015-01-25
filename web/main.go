@@ -11,15 +11,21 @@ import (
 	"time"
 )
 
+const (
+	shortf = "20060102"
+	lonfg  = "2006-01-2T15:04:05-07:00"
+)
+
 var port = flag.String("p", "80", "the port on wich we're serving")
 
 func init() {
 	addTfunc("parse", time.Parse)
+	addTfunc("now", time.Now)
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
 
-	e, err := xmlstats.BySport("nba", "20150123")
+	e, err := xmlstats.BySport("nba")
 	if err != nil {
 		log.Printf("Didn't get data :( err = %v", err)
 	}
@@ -47,7 +53,7 @@ func main() {
 	flag.Parse()
 	loadTmpl()
 	r := mux.NewRouter()
-	r.HandleFunc(``, f)
+	r.HandleFunc(`/sport/{name}`, sportHandle)
 	r.HandleFunc("/refresh", reload)
 	r.HandleFunc("/", handler)
 	r.HandleFunc("/favicon.ico", func(w http.ResponseWriter, r *http.Request) {})
@@ -61,4 +67,28 @@ func static(h http.Handler) http.HandlerFunc {
 		r.URL.Path = strings.Replace(r.URL.Path, "/static", "/resources", 1)
 		h.ServeHTTP(w, r)
 	}
+}
+
+func sportHandle(w http.ResponseWriter, req *http.Request) {
+	e, err := getSport(req)
+	if err != nil {
+		log.Printf("Didn't get data :( err = %v", err)
+	}
+
+	renderArgs := args{"events": e}
+	log.Print(e.Event)
+
+	execT(w, "events", renderArgs)
+}
+
+func getSport(req *http.Request) (xmlstats.Events, error) {
+	vars := mux.Vars(req)
+
+	name := vars[`name`]
+	date, ok := vars[`date`]
+	if !ok {
+		date = time.Now().Format(shortf)
+	}
+
+	return xmlstats.BySport(name, date)
 }

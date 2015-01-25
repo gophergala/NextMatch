@@ -5,8 +5,8 @@
         <li class="dropdown" id="sports">
           <a href="javascript:void(0);" data-target="#sports" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Sports <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
-            <li><a href="#">NBA</a></li>
-            <li><a href="#">NFL</a></li>
+            <li><a href="javascript:void(0);" id="sport-nba">NBA</a></li>
+            <li><a href="javascript:void(0);" id="sport-nfl">NFL</a></li>
           </ul>
         </li>
       </ul>
@@ -19,21 +19,9 @@
 </nav>
 <div class="jumbotron">
   <div class="container">
-    <h2>Tomorrow {{if .Tomorrow}}{{.Tomorrow}}{{end}}</h2>
+    <h2>Calendar {{if .Tomorrow}}{{.Tomorrow}}{{end}}</h2>
   </div>
 </div>
 <div class="center-block w50 teams">
-    {{range $e := .events.Event}}
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 card">
-        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 away">
-            <span class="team-img"><img src="{{$e.AwayTeam.Logo}}"></span>
-            <h3>{{$e.AwayTeam.FirstName}}</h3>
-        </div>
-        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 home">
-            <span class="team-img"><img src="{{$e.HomeTeam.Logo}}"></span>
-            <h3>{{$e.HomeTeam.FirstName}}</h3>
-        </div>
-        {{$date := parse `2006-01-2T15:04:05-07:00` $e.StartDateTime}}
-        <div class="info text-center">{{$date.Format `15:04`}} - {{$e.Site.Name}} - {{$e.EventStatus}}</div>
-    </div>{{end}}
+    {{template "events" .}}
 </div>{{template "footer"}}{{end}}

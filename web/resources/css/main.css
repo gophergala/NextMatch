@@ -7,6 +7,12 @@
     position: relative;
 }
 
+.teams .home,
+.teams .away{cursor: pointer;}
+
+.teams .home:hover,
+.teams .away:hover{background: #FCFCFC;}
+
 .teams .home{text-align: right;}
 .teams .team-img{
     height: 100px;
