@@ -23,20 +23,28 @@ func init() {
 	}
 }
 
+var cache = make(map[string]Obj)
+
 func ByTag(tag string) (data Obj, err error) {
 	var resp *http.Response
     uri := api + `/tags/` + tag + `/media/recent?access_token=` + at
-    log.Printf("req: %s", uri)
+    if _, ok := cache[uri]; ok {
+		log.Printf("cache  for URI %s", uri)
+        return cache[uri], nil
+    }
 	if resp, err = http.Get(uri); err != nil {
 		return
 	}
+	log.Printf("%s for URI %s", resp.Status, uri)
+
+
 
 	decoder := json.NewDecoder(resp.Body)
 	if err = decoder.Decode(&data); err != nil {
-		return
+		return data, err
 	}
-
-	return
+    cache[uri] = data
+	return data, err
 }
 
 func BuildTag(away, home string) string {

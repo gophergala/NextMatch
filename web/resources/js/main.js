@@ -25,14 +25,4 @@ $(document).ready(function() {
             $('.teams').append(data);
         });
     });
-
-    $('#sport-nba').click(function(e){
-        e.preventDefault();
-        setsport('nba');
-    })
-
-    $('#sport-nfl').click(function(e){
-        e.preventDefault();
-        setsport('nfl');
-    })
 });

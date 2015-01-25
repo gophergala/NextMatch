@@ -27,8 +27,14 @@ func init() {
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	sport, ok := vars[`sport`]
+	if !ok {
+		// default to nba
+		sport = `nba`
+	}
 
-	e, err := xmlstats.BySport("nba")
+	e, err := xmlstats.BySport(sport)
 	if err != nil {
 		log.Printf("Didn't get data :( err = %v", err)
 	}
@@ -56,6 +62,7 @@ func main() {
 	flag.Parse()
 	loadTmpl()
 	r := mux.NewRouter()
+	r.HandleFunc(`/s/{sport}`, handler)
 	r.HandleFunc(`/details/{sport}/{id}`, teamDetails)
 	r.HandleFunc(`/{sport}/{home}-vs-{away}`, showGameDetails)
 	r.HandleFunc(`/sport/{name}/{date}`, sportHandle)
