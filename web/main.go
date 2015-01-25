@@ -3,12 +3,14 @@ package main
 import (
 	"flag"
 	"github.com/gophergala/NextMatch/updater/xmlstats"
+    "github.com/gophergala/NextMatch/social/instagram"
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
 	"os"
 	"strings"
 	"time"
+	"fmt"
 )
 
 const (
@@ -53,7 +55,8 @@ func main() {
 	flag.Parse()
 	loadTmpl()
 	r := mux.NewRouter()
-	r.HandleFunc(`/sport/{name}`, sportHandle)
+	r.HandleFunc(`/{sport}/{home}-vs-{away}`, showGameDetails)
+	r.HandleFunc(`/sport/{name}/{date}`, sportHandle)
 	r.HandleFunc("/refresh", reload)
 	r.HandleFunc("/", handler)
 	r.HandleFunc("/favicon.ico", func(w http.ResponseWriter, r *http.Request) {})
@@ -82,6 +85,31 @@ func sportHandle(w http.ResponseWriter, req *http.Request) {
 	log.Print(e.Event)
 
 	execT(w, "events", renderArgs)
+}
+
+func showGameDetails(w http.ResponseWriter, req *http.Request) {
+    vars := mux.Vars(req)
+    sport := vars["sport"]
+    home := vars["home"]
+    away := vars["away"]
+    e, err := xmlstats.BySport(sport)
+    //log.Println(e)
+	if err != nil {
+		log.Printf("Didn't get data :( err = %v", err)
+	}
+	tag :=  fmt.Sprintf("%svs%s", strings.Split(home, " ")[0], strings.Split(away, " ")[0])
+	o, err := instagram.ByTag( tag )
+    if err != nil {
+        log.Printf("Awwm :( dint' get anything for %s, error: %v", tag,  err )
+    }
+    //log.Println(o)
+	renderArgs := args{
+	    "events": e,
+	    "images": o,
+	    "title" : fmt.Sprintf("%s vs %s", home, away ),
+	}
+
+	execT(w, "details", renderArgs)
 }
 
 func getSport(req *http.Request) (xmlstats.Events, error) {
