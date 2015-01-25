@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	at  = `2275718.1fb234f.580dabd7008f4529995d071001a5abe5` // access_token
+	at  = `INSTAGRAM_ACCESS_TOKEN` // access_token
 	api = `https://api.instagram.com/v1`                    //api_url
 )
 
