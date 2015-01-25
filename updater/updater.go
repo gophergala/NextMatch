@@ -68,6 +68,7 @@ const (
 	shortf  = `20060102`
 	evtURI  = `https://erikberg.com/events.json?sport=%s&date=%s` // league[nba,nfl] date
 	rsltURI = `https://erikberg.com//sport/results/%s.json`       // team_id
+	token   = `0c301171-c857-4d46-b73f-d8f46602cae9`
 )
 
 var (
@@ -85,9 +86,12 @@ func BySport(sport string, date ...string) (ev Events, err error) {
 		date = append(date, time.Now().Format(shortf))
 	}
 
-	if req, err = http.NewRequest(`GET`, fmt.Sprintf(evtURI, sport, date[0]), nil); err != nil {
+	uri := fmt.Sprintf(evtURI, sport, date[0])
+	if req, err = http.NewRequest(`GET`, uri, nil); err != nil {
 		return
 	}
+
+	req.Header.Add("Authorization", "Bearer "+token)
 
 	if resp, err = http.DefaultClient.Do(req); err != nil {
 		return
@@ -126,4 +130,9 @@ func decode(resp *http.Response, d interface{}) error {
 	decoder = json.NewDecoder(resp.Body)
 
 	return decoder.Decode(d)
+}
+
+func Unmarshal(b string, d interface{}) error {
+	data := []byte(b)
+	return json.Unmarshal(data, d)
 }
