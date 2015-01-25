@@ -56,6 +56,7 @@ func main() {
 	flag.Parse()
 	loadTmpl()
 	r := mux.NewRouter()
+	r.HandleFunc(`/details/{sport}/{id}`, teamDetails)
 	r.HandleFunc(`/{sport}/{home}-vs-{away}`, showGameDetails)
 	r.HandleFunc(`/sport/{name}/{date}`, sportHandle)
 	r.HandleFunc(`/sport/{name}`, sportHandle)
@@ -136,4 +137,34 @@ type fof int
 
 func (f *fof) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	thatsA404(w, r)
+}
+
+func teamDetails(w http.ResponseWriter, req *http.Request) {
+	vars := mux.Vars(req)
+
+	id := vars[`id`]
+	sport := vars[`sport`]
+
+	r, err := xmlstats.Result(sport, id)
+	if err != nil {
+		log.Printf("err on details: ", err)
+	}
+
+	slug := fmt.Sprintf("%svs%s", r.Team.LastName, r.Opponent.LastName)
+	if slug == `vs` {
+		slug = ``
+	}
+
+	images, err := instagram.ByTag(slug)
+	if err != nil {
+		log.Printf("instagram err on details: ", err)
+	}
+
+	renderArgs := args{
+		`event`:  r,
+		`title`:  `details`,
+		`images`: images,
+	}
+
+	execT(w, `details`, renderArgs)
 }
