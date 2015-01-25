@@ -42,6 +42,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	renderArgs := args{
 		"events": e,
 		"title":  "Home",
+		`sport`:  sport,
 	}
 
 	execT(w, "home", renderArgs)
