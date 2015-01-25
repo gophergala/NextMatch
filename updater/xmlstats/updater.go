@@ -1,4 +1,4 @@
-package uxmlstats
+package xmlstats
 
 import (
 	"encoding/json"
@@ -114,4 +114,9 @@ func Result(teamId int) (results Results, err error) {
 func decode(resp *http.Response, d interface{}) error {
 	decoder := json.NewDecoder(resp.Body)
 	return decoder.Decode(d)
+}
+
+func Unmarshal(b string, d interface{}) error {
+	data := []byte(b)
+	return json.Unmarshal(data, d)
 }

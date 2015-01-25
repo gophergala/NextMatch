@@ -1,0 +1,28 @@
+.teams {
+    width: 60%;
+}
+
+.w50{width: 50%}
+
+.teams .card{
+    border-bottom: 1px solid #5C5C5C;
+    box-shadow: 0px 1px 0px #1C1C1C;
+    padding: 2em;
+    position: relative;
+}
+
+.teams .home{text-align: right;}
+.teams .team-img{
+    border-radius: 100px;
+    background: #000;
+    height: 100px;
+    width: 100px;
+    display: inline-block;
+}
+
+.teams .card .info {
+    margin-top: 1em;
+    font-size: 2em;
+    font-weight: normal;
+    display: inline-block;
+}
