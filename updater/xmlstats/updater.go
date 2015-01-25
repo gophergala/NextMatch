@@ -1,4 +1,4 @@
-package updater
+package uxmlstats
 
 import (
 	"encoding/json"
@@ -65,65 +65,53 @@ type (
 )
 
 const (
-	shortf  = `20060102`
-	evtURI  = `https://erikberg.com/events.json?sport=%s&date=%s` // league[nba,nfl] date
-	rsltURI = `https://erikberg.com//sport/results/%s.json`       // team_id
+	shortf    = "20060102"
+	eventURI  = "https://erikberg.com/events.json?sport=%s&date=%s" // league[nba,nfl] date
+	resultURI = "https://erikberg.com/sport/results/%s.json"        // team_id
+	userAgent = "nextmatch/0.1 (https://twitter.com/oscarryz)"
+	auth      = "Bearer %s"
 )
 
 var (
-	decoder *json.Decoder
+	Token string
 )
+
+func doRequest(uri string, result interface{})  error {
+
+	req, err := http.NewRequest("GET", uri, nil )
+	if err != nil {
+		return err
+	}
+
+	req.Header.Add("Authorization", fmt.Sprintf(auth, Token))
+	req.Header.Add("User-agent", userAgent)
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return err
+	}
+
+	return decode(resp, result)
+}
 
 // BySport returns events in certain sport [with an optional date]
 func BySport(sport string, date ...string) (ev Events, err error) {
-	var (
-		resp *http.Response
-		req  *http.Request
-	)
 
 	if len(date) < 1 {
 		date = append(date, time.Now().Format(shortf))
 	}
 
-	if req, err = http.NewRequest(`GET`, fmt.Sprintf(evtURI, sport, date[0]), nil); err != nil {
-		return
-	}
-
-	if resp, err = http.DefaultClient.Do(req); err != nil {
-		return
-	}
-
-	if err = decode(resp, &ev); err != nil {
-		return
-	}
-
-	return
+    err = doRequest(fmt.Sprintf(eventURI, sport, date[0]), &ev)
+    return ev, err
 }
 
 // Result
-func Result(team_id int) (rslt Results, err error) {
-	var (
-		req  *http.Request
-		resp *http.Response
-	)
-
-	if req, err = http.NewRequest(`GET`, fmt.Sprintf(rsltURI, team_id), nil); err != nil {
-		return
-	}
-
-	if resp, err = http.DefaultClient.Do(req); err != nil {
-		return
-	}
-
-	if err = decode(resp, rslt); err != nil {
-		return
-	}
-
-	return
+func Result(teamId int) (results Results, err error) {
+	err = doRequest(fmt.Sprintf(resultURI, teamId), &results)
+	return results, err
 }
 
 func decode(resp *http.Response, d interface{}) error {
-	decoder = json.NewDecoder(resp.Body)
-
+	decoder := json.NewDecoder(resp.Body)
 	return decoder.Decode(d)
 }
