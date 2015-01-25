@@ -35,6 +35,8 @@
 
 .details { text-decoration: none; }}
 
+.reactios{position: relative;}
+
 .reactions img{
     max-width: 30%;
     padding: 1%;

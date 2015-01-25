@@ -22,10 +22,11 @@
     <h2>{{.title}} {{if .Tomorrow}}{{.Tomorrow}}{{end}}</h2>
   </div>
 </div>
-
-<div class="reactions center-block">
-<h2>Reactions:</h2>
-{{range $o := .images.Data}}
-<img src="{{$o.Images.StandardResolution.URL}}">
-{{end}}
+<div class="container">  
+  <h2>Reactions:</h2>
+  <div class="reactions text-center">
+  {{range $o := .images.Data}}
+  <img src="{{$o.Images.StandardResolution.URL}}">
+  {{end}}
+  </div>
 </div>{{template "footer"}}{{end}}
