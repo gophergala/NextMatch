@@ -17,6 +17,7 @@
         <button type="submit" class="btn btn-default">Submit</button>
       </form>
 </nav>
+<div class="jumbotron">
 <div class="center-block w50 teams">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <h2>Tomorrow {{if .Tomorrow}}{{.Tomorrow}}{{end}}</h2>
@@ -24,12 +25,12 @@
     {{range $e := .events.Event}}
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 card">
         <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 away">
-            <span class="team-img"></span>
-            <h3>{{$e.AwayTeam.FirstName}}</h3>
+            <span class="team-img"><h3><img src="{{$e.AwayTeam.Logo}}">{{$e.AwayTeam.FirstName}}</h3></span>
+            <span></span>
         </div>
         <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 home">
-            <span class="team-img"></span>
-            <h3>{{$e.HomeTeam.FirstName}}</h3>
+            <span></span>
+            <span class="team-img"><h3>{{$e.HomeTeam.FirstName}}<img src="{{$e.HomeTeam.Logo}}"></h3></span>
         </div>
         <div class="inf text-center">
             {{$date := parse `2006-01-2T15:04:05-07:00` $e.StartDateTime}}
@@ -37,5 +38,6 @@
         </div>
     </div>
     {{end}}
+</div>
 </div>
 {{end}}

@@ -54,6 +54,7 @@ type (
 		SiteName     string `json:"site_name"`
 		State        string `json:"state"`
 		TeamID       string `json:"team_id"`
+		Logo        string
 	}
 
 	Site struct {
