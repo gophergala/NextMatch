@@ -64,12 +64,70 @@ type (
 		State    string  `json:"state"`
 		Surface  string  `json:"surface"`
 	}
+
+	BoxScore struct {
+		AwayPeriodScores []float64 `json:"away_period_scores"`
+		AwayStats        []Stats   `json:"away_stats"`
+		AwayTeam         Team      `json:"away_team"`
+		AwayTotals       Stats     `json:"away_totals"`
+		EventInformation struct {
+			Attendance float64 `json:"attendance"`
+			Duration   string  `json:"duration"`
+			SeasonType string  `json:"season_type"`
+			Site       struct {
+				Capacity float64 `json:"capacity"`
+				City     string  `json:"city"`
+				Name     string  `json:"name"`
+				State    string  `json:"state"`
+				Surface  string  `json:"surface"`
+			} `json:"site"`
+			StartDateTime string  `json:"start_date_time"`
+			Temperature   float64 `json:"temperature"`
+		} `json:"event_information"`
+		HomePeriodScores []float64 `json:"home_period_scores"`
+		HomeStats        []Stats   `json:"home_stats"`
+		HomeTeam         Team      `json:"home_team"`
+		HomeTotals       Stats     `json:"home_totals"`
+		Officials        []struct {
+			FirstName string      `json:"first_name"`
+			LastName  string      `json:"last_name"`
+			Position  interface{} `json:"position"`
+		} `json:"officials"`
+	}
+
+	Stats struct {
+		Assists                       float64 `json:"assists"`
+		Blocks                        float64 `json:"blocks"`
+		DefensiveRebounds             float64 `json:"defensive_rebounds"`
+		DisplayName                   string  `json:"display_name"`
+		FieldGoalPercentage           float64 `json:"field_goal_percentage"`
+		FieldGoalsAttempted           float64 `json:"field_goals_attempted"`
+		FieldGoalsMade                float64 `json:"field_goals_made"`
+		FirstName                     string  `json:"first_name"`
+		FreeThrowPercentage           float64 `json:"free_throw_percentage"`
+		FreeThrowsAttempted           float64 `json:"free_throws_attempted"`
+		FreeThrowsMade                float64 `json:"free_throws_made"`
+		IsStarter                     bool    `json:"is_starter"`
+		LastName                      string  `json:"last_name"`
+		Minutes                       float64 `json:"minutes"`
+		OffensiveRebounds             float64 `json:"offensive_rebounds"`
+		PersonalFouls                 float64 `json:"personal_fouls"`
+		Points                        float64 `json:"points"`
+		Position                      string  `json:"position"`
+		Steals                        float64 `json:"steals"`
+		TeamAbbreviation              string  `json:"team_abbreviation"`
+		ThreePointFieldGoalsAttempted float64 `json:"three_point_field_goals_attempted"`
+		ThreePointFieldGoalsMade      float64 `json:"three_point_field_goals_made"`
+		ThreePointPercentage          float64 `json:"three_point_percentage"`
+		Turnovers                     float64 `json:"turnovers"`
+	}
 )
 
 const (
 	shortf    = "20060102"
 	eventURI  = "https://erikberg.com/events.json?sport=%s&date=%s" // league[nba,nfl] date
 	resultURI = "https://erikberg.com/%s/results/%s.json"           // team_id
+	scoreURI  = "https://erikberg.com/%s/boxscore/%s.json"          // team_id
 	userAgent = "nextmatch/0.1 (https://twitter.com/oscarryz)"
 	auth      = "Bearer %s"
 )
@@ -131,6 +189,17 @@ func Result(sport, teamId string) (results Results, err error) {
 	uri := fmt.Sprintf(resultURI, sport, teamId)
 	if cache[uri] != nil {
 		return cache[uri].(Results), nil
+	}
+	err = doRequest(uri, &results)
+	cache[uri] = results
+	return results, err
+}
+
+// Score
+func Score(sport, eventId string) (results BoxScore, err error) {
+	uri := fmt.Sprintf(scoreURI, sport, eventId)
+	if cache[uri] != nil {
+		return cache[uri].(BoxScore), nil
 	}
 	err = doRequest(uri, &results)
 	cache[uri] = results
