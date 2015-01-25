@@ -171,6 +171,7 @@ func teamDetails(w http.ResponseWriter, req *http.Request) {
 		`event`:  r,
 		`title`:  `details`,
 		`images`: images,
+		`sport`:  sport,
 	}
 
 	execT(w, `details`, renderArgs)

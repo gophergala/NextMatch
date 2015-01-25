@@ -4,7 +4,6 @@
 {{$eventsDate := parse $longf .events.EventsDate}}
 {{$today := now.Format $dayf}}
 {{$ed := $eventsDate.Format $dayf}}
-{{$sp := ``}}
 <h2 class="range">{{if eq $ed $today}}Today -{{end}}
     {{$ed}}
 </h2>
