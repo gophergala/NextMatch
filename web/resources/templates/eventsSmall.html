@@ -1,0 +1,28 @@
+{{define "eventsSmall"}}
+{{$longf := `2006-01-2T15:04:05-07:00`}}
+{{$dayf := `Mon Jan 2`}}
+{{$eventsDate := parse $longf .events.EventsDate}}
+{{$today := now.Format $dayf}}
+{{$ed := $eventsDate.Format $dayf}}
+{{$sp := ``}}
+<h3 class="range">{{if eq $ed $today}}Today -{{end}}
+    {{$ed}}
+</h3>
+{{range $e := .events.Event}}
+    <div class="match"><a href="/nba/{{$e.AwayTeam.LastName}}-vs-{{$e.HomeTeam.LastName}}" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 away" data-id="{{$e.AwayTeam.TeamID}}">
+            <h4>{{$e.AwayTeam.LastName}}</h4>
+            <span class="team-img-small"><img src="{{$e.AwayTeam.Logo}}"></span>
+
+        </div>
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 home" data-id="{{$e.HomeTeam.TeamID}}">
+            <h4>{{$e.HomeTeam.LastName}}</h4>
+            <span class="team-img-small"><img src="{{$e.HomeTeam.Logo}}"></span>
+
+        </div>
+    </a></div>
+{{end}}
+{{if not .events.Event}}
+    <h3>No results… try hitting the load more button</h3>
+{{end}}
+{{end}}

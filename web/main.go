@@ -62,7 +62,7 @@ func main() {
 	flag.Parse()
 	loadTmpl()
 	r := mux.NewRouter()
-	r.HandleFunc(`/s/{sport}`, handler)
+	r.HandleFunc(`/sport/{sport}`, handler)
 	r.HandleFunc(`/details/{sport}/{id}`, teamDetails)
 	r.HandleFunc(`/{sport}/{home}-vs-{away}`, showGameDetails)
 	r.HandleFunc(`/sport/{name}/{date}`, sportHandle)

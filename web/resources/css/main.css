@@ -1,5 +1,7 @@
 .w50{width: 50%}
 
+.w85{width: 85%}
+
 .teams .card{
     border-bottom: 1px solid #EBEBEB;
     box-shadow: 0px 1px 0px #FAFAFA;
@@ -11,9 +13,7 @@
 .teams .card:hover{background: #FCFCFC;}
 
 .teams .home{text-align: right;}
-.teams .team-img{
-    /*height: 100px;
-    width: 100px;*/
+.teams .team-img {
     display: inline-block;
     text-align: center;
 }
@@ -25,6 +25,7 @@
 }
 
 .teams .team-img img{width: 100%}
+.teams .team-img-small img{width: 80%}
 
 .teams .card .info {
     margin-top: 1em;
@@ -41,4 +42,10 @@
     max-width: 30%;
     padding: 1%;
     display: inline-block;
+}
+
+.leftNav {
+  position: absolute;
+  left: 0px;
+  background-color:  #ecf0f1
 }

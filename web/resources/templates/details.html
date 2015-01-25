@@ -4,6 +4,11 @@
     <h2>{{.title}} {{if .Tomorrow}}{{.Tomorrow}}{{end}}</h2>
   </div>
 </div>
+<div class="leftNav">
+    <div class="center-block w85 row teams" data-sport="{{if .events.Event}}{{with index .events.Event 0}}{{.Sport}}{{end}}{{else}}nba{{end}}" data-date="{{.events.EventsDate}}">
+        {{template "eventsSmall" .}}
+    </div>
+</div>
 {{if .images.Data}}
 <div class="container">  
   <h2>Reactions:</h2>
@@ -12,5 +17,6 @@
   <img src="{{$o.Images.StandardResolution.URL}}">
   {{end}}
   </div>
-</div>{{template "footer"}}{{end}}
+</div>
+{{template "footer"}}{{end}}
 {{end}}
