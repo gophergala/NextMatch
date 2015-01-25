@@ -8,15 +8,13 @@ import (
 var (
 	tLoader *template.Template
 	funcMap = make(template.FuncMap)
-	tp      = `web/resources/templates/`
 )
 
 type args map[string]interface{}
 
 func loadTmpl() {
 	// cache template parsing
-	templates := tmplPath(`default.html`, `home.html`)
-	tLoader = template.Must(template.New(``).Funcs(funcMap).ParseFiles(templates...))
+	tLoader = template.Must(template.New(``).Funcs(funcMap).ParseGlob(`web/resources/templates/*`))
 }
 
 func execT(w http.ResponseWriter, name string, data interface{}) {

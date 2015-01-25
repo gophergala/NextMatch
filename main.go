@@ -24,7 +24,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		`title`:  `Home`,
 	}
 
-	customT(w, `home`, renderArgs)
+	execT(w, `home`, renderArgs)
 }
 
 func reload(rw http.ResponseWriter, req *http.Request) {
