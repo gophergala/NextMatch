@@ -4,7 +4,7 @@
     <h1>Calendar</h1>
   </div>
 </div>
-<div class="center-block w50 row teams" data-sport="{{if .events.Event}}{{with index .events.Event 0}}{{.Sport}}{{end}}{{else}}nba{{end}}" data-date="{{.events.EventsDate}}">
+<div class="center-block w50 row teams" data-sport="{{.sport}}" data-date="{{.events.EventsDate}}">
     {{template "events" .}}
 </div>
 <br>

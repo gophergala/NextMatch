@@ -4,10 +4,13 @@
 {{$eventsDate := parse $longf .events.EventsDate}}
 {{$today := now.Format $dayf}}
 {{$ed := $eventsDate.Format $dayf}}
-{{$sp := ``}}
-<h2 class="range">{{if eq $ed $today}}Today -{{end}}
-    {{$ed}}
-</h2>
+{{if not .events.Event}}
+    <h3>No results… try hitting the load more button</h3>
+{{else}}
+    <h2 class="range">{{if eq $ed $today}}Today -{{end}}
+        {{$ed}}
+    </h2>
+{{end}}
 {{range $e := .events.Event}}
     <div class="match"><a href="/nba/{{$e.AwayTeam.LastName}}-vs-{{$e.HomeTeam.LastName}}" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 card">
         <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 away" data-id="{{$e.AwayTeam.TeamID}}">
@@ -22,7 +25,5 @@
         <div class="info text-center">{{$date.Format `15:04`}} - {{$e.Site.Name}} - {{$e.EventStatus}}</div>
     </a></div>
 {{end}}
-{{if not .events.Event}}
-    <h3>No results… try hitting the load more button</h3>
-{{end}}
+
 {{end}}
