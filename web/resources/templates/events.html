@@ -4,6 +4,7 @@
 {{$eventsDate := parse $longf .events.EventsDate}}
 {{$today := now.Format $dayf}}
 {{$ed := $eventsDate.Format $dayf}}
+{{$sp := ``}}
 <h2>{{if eq $ed $today}}Today -{{end}}
     {{$ed}}
 </h2>
@@ -20,5 +21,8 @@
         {{$date := parse $longf $e.StartDateTime}}
         <div class="info text-center">{{$date.Format `15:04`}} - {{$e.Site.Name}} - {{$e.EventStatus}}</div>
     </div>
-    <input type="hidden" id="lastDate" value="{{$eventsDate}}">
-{{end}}{{end}}
+{{end}}
+{{if not .events.Event}}
+    <h3>No results… try hitting the load more button</h3>
+{{end}}
+{{end}}
