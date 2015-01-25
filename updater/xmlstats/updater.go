@@ -69,7 +69,7 @@ type (
 const (
 	shortf    = "20060102"
 	eventURI  = "https://erikberg.com/events.json?sport=%s&date=%s" // league[nba,nfl] date
-	resultURI = "https://erikberg.com/sport/results/%s.json"        // team_id
+	resultURI = "https://erikberg.com/%s/results/%s.json"           // team_id
 	userAgent = "nextmatch/0.1 (https://twitter.com/oscarryz)"
 	auth      = "Bearer %s"
 )
@@ -127,8 +127,8 @@ func BySport(sport string, date ...string) (ev Events, err error) {
 }
 
 // Result
-func Result(teamId string) (results Results, err error) {
-	uri := fmt.Sprintf(resultURI, teamId)
+func Result(sport, teamId string) (results Results, err error) {
+	uri := fmt.Sprintf(resultURI, sport, teamId)
 	if cache[uri] != nil {
 		return cache[uri].(Results), nil
 	}
