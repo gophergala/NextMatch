@@ -75,9 +75,11 @@
 .versus{
     position: absolute;
     font-weight: bold;
-    -moz-transform: translate(-50%,60%);
-    -webkit-transform: translate(-50%,60%);
-    -ms-transform: translate(-50%,60%);
-    transform: translate(-50%,60%);
+    -moz-transform: translate(-50%, -90%);
+    -webkit-transform: translate(-50%, -90%);
+    -ms-transform: translate(-50%, -90%);
+    transform: translate(-50%, -90%);
     font-size: 1.1em;
+    top: 50%;
+    left: 50%;
 }

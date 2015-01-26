@@ -162,19 +162,24 @@ func eventScore(w http.ResponseWriter, req *http.Request) {
 		log.Printf("err on details: ", err)
 	}
 
+	e, err := xmlstats.BySport(sport)
+	if err != nil {
+		log.Println(`event list error `, err)
+	}
+
 	slug := fmt.Sprintf("%svs%s", r.AwayTeam.LastName, r.HomeTeam.LastName)
 	if slug == `vs` {
-		slug = ``
+		o := e.ById(id)
+		if o == nil {
+			slug = ``
+		} else {
+			slug = fmt.Sprintf("%svs%s", o.AwayTeam.LastName, o.HomeTeam.LastName)
+		}
 	}
 
 	images, err := instagram.ByTag(slug)
 	if err != nil {
 		log.Printf("instagram err on details: %+v", err)
-	}
-
-	e, err := xmlstats.BySport(sport)
-	if err != nil {
-		log.Println(`event list error `, err)
 	}
 
 	renderArgs := args{

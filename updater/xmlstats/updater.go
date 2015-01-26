@@ -10,17 +10,8 @@ import (
 
 type (
 	Events struct {
-		Event []struct {
-			EventID       string `json:"event_id"`
-			EventStatus   string `json:"event_status"`
-			AwayTeam      Team   `json:"away_team"`
-			HomeTeam      Team   `json:"home_team"`
-			SeasonType    string `json:"season_type"`
-			Site          Site   `json:"site"`
-			Sport         string `json:"sport"`
-			StartDateTime string `json:"start_date_time"`
-		} `json:"event"`
-		EventsDate string `json:"events_date"`
+		Event      []Event `json:"event"`
+		EventsDate string  `json:"events_date"`
 	}
 
 	Results struct {
@@ -121,6 +112,17 @@ type (
 		ThreePointPercentage          float64 `json:"three_point_percentage"`
 		Turnovers                     float64 `json:"turnovers"`
 	}
+
+	Event struct {
+		EventID       string `json:"event_id"`
+		EventStatus   string `json:"event_status"`
+		AwayTeam      Team   `json:"away_team"`
+		HomeTeam      Team   `json:"home_team"`
+		SeasonType    string `json:"season_type"`
+		Site          Site   `json:"site"`
+		Sport         string `json:"sport"`
+		StartDateTime string `json:"start_date_time"`
+	}
 )
 
 const (
@@ -218,6 +220,16 @@ func decode(resp *http.Response, d interface{}) error {
 func Unmarshal(b string, d interface{}) error {
 	data := []byte(b)
 	return json.Unmarshal(data, d)
+}
+
+func (e *Events) ById(id string) *Event {
+	for _, v := range e.Event {
+		if v.EventID == id {
+			return &v
+		}
+	}
+
+	return nil
 }
 
 var teamLogos = map[string]string{
