@@ -59,6 +59,25 @@
     background: transparent;
 }
 
-.teams.small h3{font-size: 1.8em}
+.teams.small .home,
+.teams.small .away{
+    white-space: nowrap;
+    overflow: hidden;
+    -moz-text-overflow: "…";
+    -webkit-text-overflow: "…";
+    -ms-text-overflow: "…";
+    text-overflow: "…";
+}
+
+.teams.small h3{font-size: 1.1em}
 .teams.small h2{font-size: 2em}
 .teams.small .info{font-size: 1em}
+.versus{
+    position: absolute;
+    font-weight: bold;
+    -moz-transform: translate(-50%,60%);
+    -webkit-transform: translate(-50%,60%);
+    -ms-transform: translate(-50%,60%);
+    transform: translate(-50%,60%);
+    font-size: 1.1em;
+}
