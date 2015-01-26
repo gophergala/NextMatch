@@ -10,7 +10,7 @@
     </h2>
 {{end}}
 {{range $e := .events.Event}}
-    <div class="match"><a href="/details/{{lower $e.Sport}}/{{$e.EventID}}" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 small">
+    <div class="match"><a href="/details/{{lower $e.Sport}}/{{$e.EventID}}" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 card">
         <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 away">
             <span class="team-img"><img src="{{$e.AwayTeam.Logo}}"></span>
             <h3>{{$e.AwayTeam.FirstName}} {{$e.AwayTeam.LastName}}</h3>

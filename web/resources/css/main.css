@@ -25,7 +25,7 @@
 }
 
 .teams .team-img img{width: 100%}
-.teams .small .team-img img{width: 80%}
+.teams.small .team-img img{width: 80%}
 
 .teams .card .info {
     margin-top: 1em;
@@ -52,12 +52,13 @@
 
 .range{position: sticky}
 
-.teams .small {
+.teams.small .card {
     border-bottom: 1px solid #EBEBEB;
     box-shadow: 0px 1px 0px #FAFAFA;
     padding: 1.3em;
     background: transparent;
 }
 
-.teams .small h3{font-size: 0.9em}
-.teams .small .info{font-size: 1em}
+.teams.small h3{font-size: 1.8em}
+.teams.small h2{font-size: 2em}
+.teams.small .info{font-size: 1em}
