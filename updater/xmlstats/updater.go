@@ -202,6 +202,10 @@ func Score(sport, eventId string) (results BoxScore, err error) {
 		return cache[uri].(BoxScore), nil
 	}
 	err = doRequest(uri, &results)
+
+	results.AwayTeam.Logo = teamLogos[results.AwayTeam.TeamID]
+	results.HomeTeam.Logo = teamLogos[results.HomeTeam.TeamID]
+
 	cache[uri] = results
 	return results, err
 }
