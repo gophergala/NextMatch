@@ -25,7 +25,7 @@
 }
 
 .teams .team-img img{width: 100%}
-.teams .team-img-small img{width: 80%}
+.teams .small .team-img img{width: 80%}
 
 .teams .card .info {
     margin-top: 1em;
@@ -34,9 +34,10 @@
     display: inline-block;
 }
 
-.match a { color: #2c3e50;}
-
-.reactios{position: relative;}
+.match a { 
+    color: #2c3e50;
+    text-decoration: none
+}
 
 .reactions img{
     max-width: 30%;
@@ -45,7 +46,18 @@
 }
 
 .leftNav {
-  position: absolute;
-  left: 0px;
-  background-color:  #ecf0f1
+    left: 0;
+    background-color:  #ECF0F1;
 }
+
+.range{position: sticky}
+
+.teams .small {
+    border-bottom: 1px solid #EBEBEB;
+    box-shadow: 0px 1px 0px #FAFAFA;
+    padding: 1.3em;
+    background: transparent;
+}
+
+.teams .small h3{font-size: 0.9em}
+.teams .small .info{font-size: 1em}
