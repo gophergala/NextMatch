@@ -71,6 +71,10 @@ func main() {
 	r.HandleFunc("/refresh", reload)
 	r.HandleFunc("/", handler)
 	r.HandleFunc("/favicon.ico", func(w http.ResponseWriter, r *http.Request) {})
+	r.HandleFunc("/about", func(w http.ResponseWriter, r *http.Request) {
+	    	execT(w, "about", nil)
+	 })
+
 	r.HandleFunc("/404", thatsA404)
 	http.Handle("/static/", static(http.FileServer(http.Dir("."))))
 	http.Handle(`/`, r)
